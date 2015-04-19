@@ -2,17 +2,17 @@
 
 ## Currently Implemented Components
 
- Flask based structure
- Flask-RESTful based routing and arguments parsing
- mongoengine based models
- JSON Web Token(JWT) based authentication
- redis based request rate limiting(unfinished)
- qiniu based photo uploading(unfinished)
+* Flask based structure
+* Flask-RESTful based routing and arguments parsing
+* mongoengine based models
+* JSON Web Token(JWT) based authentication
+* redis based request rate limiting(unfinished)
+* qiniu based photo uploading(unfinished)
 
 ## Currently Implemented Features
 
- Auth(User) System
- Status(Feed) System
+* Auth(User) System
+* Status(Feed) System
 
 # Feature: Parameters Checking
 
