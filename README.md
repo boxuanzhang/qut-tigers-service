@@ -14,6 +14,45 @@
 * Auth(User) System
 * Status(Feed) System
 
+# Installation
+
+```
+pip install -r requirements.txt
+```
+
+# Running
+
+## Development
+
+```
+python ./run.py
+```
+
+## Production
+
+```
+uwsgi --ini uwsgi.ini
+```
+
+Example of `uwsgi.ini`:
+
+```
+[uwsgi]
+chdir=/opt/qut-tigers-service/
+module=simplrapi:app
+master=true
+pidfile=/var/run/qut-tigers.pid
+vacuum=true
+max-requests=5000
+daemonize=/var/log/uwsgi/qut-tigers.log
+socket=/var/run/qut-tigers.sock
+processes=2
+buffer-size=65535
+lazy-app=true
+gevent=64
+gevent-monkey-patch=true
+```
+
 # Feature: Parameters Checking
 
 ```
