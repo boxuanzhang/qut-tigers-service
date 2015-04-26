@@ -45,3 +45,8 @@ api.add_resource(Auth, '/auth')
 from tigers.resources.status import Status, StatusList
 api.add_resource(StatusList, '/status')
 api.add_resource(Status, '/status/<status_id>')
+
+# Photo
+from tigers.resources.photo import Photo, PhotoToken
+api.add_resource(Photo, '/photo/<photo_id>')
+api.add_resource(PhotoToken, '/photo_token')
