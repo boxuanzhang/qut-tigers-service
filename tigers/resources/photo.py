@@ -46,7 +46,6 @@ class PhotoToken(Resource):
 
         return upload_params, 200
 
-    @login_required
     def post(self):
         body = request.stream.readline()
 
