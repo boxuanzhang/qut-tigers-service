@@ -48,11 +48,11 @@ api = Api(app)
 
 # Auth
 from .resources.auth import Auth
-api.add_resource(Auth, '/auth')
+api.add_resource(Auth, '/auth/')
 
 # Status
 from .resources.status import Status, StatusList
-api.add_resource(StatusList, '/status')
+api.add_resource(StatusList, '/status/')
 api.add_resource(Status, '/status/<status_id>')
 
 # Photo
@@ -62,5 +62,5 @@ api.add_resource(PhotoToken, '/photo_token')
 
 # User
 from .resources.user import User, UserList
-api.add_resource(UserList, '/user')
+api.add_resource(UserList, '/user/')
 api.add_resource(User, '/user/<user_id>')

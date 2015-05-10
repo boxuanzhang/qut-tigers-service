@@ -25,12 +25,19 @@ class Auth(Resource):
         # Generate access token
         access, refresh, expire = generate_token(user)
 
+        # Get permissions
+        permissions = []
+        for group in user.groups:
+            permissions += group.permissions
+        user.permissions = set(permissions)
+
         return \
             {
                 'access_token': access,
                 'refresh_token': refresh,
                 'expire': expire,
-                'user': user.export_entity()
+                'user': user.export_entity(),
+                'permissions': permissions
             }, http_status.HTTP_200_OK
 
     def post(self):
