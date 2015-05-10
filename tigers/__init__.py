@@ -14,7 +14,13 @@ from flask import Flask
 app = Flask(__name__)
 
 # Load configurations
-app.config.from_object('config')
+import os
+
+app.config.from_object('config_default')
+if 'TIGERS_CONF' not in os.environ:
+    print 'Warning: "TIGERS_CONF" not set in environment, using default configurations.'
+else:
+    app.config.from_envvar('TIGERS_CONF')
 
 #
 # Build mongodb connection
