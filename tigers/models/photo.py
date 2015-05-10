@@ -1,10 +1,8 @@
-
-
 import datetime
 from mongoengine import *
 from user import User
-from utils.export import ExportableMixin
-from tigers.utils.qiniu import get_image_url
+from .utils.export import ExportableMixin
+from ..utils.qiniu import get_image_url
 
 
 __all__ = [
