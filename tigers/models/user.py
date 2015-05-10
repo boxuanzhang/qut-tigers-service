@@ -7,6 +7,7 @@ import binascii
 from bson import ObjectId
 from mongoengine import *
 from utils.export import ExportableMixin
+from utils.pagination import paging
 
 
 class RefreshToken(Document):
@@ -16,10 +17,11 @@ class RefreshToken(Document):
 
 class Group(Document):
     name = StringField(required=True)
+    permissions = ListField(StringField(), default=list)
 
 
 class User(Document, ExportableMixin):
-    username = StringField(max_length=64, required=True)
+    username = StringField(max_length=64, unique=True, required=True)
     name = StringField(max_length=64, required=True)
     password = StringField(required=True)
     salt = StringField(required=True)
@@ -48,17 +50,21 @@ class UserHelper(object):
         return User.objects(username=username).first()
 
     @staticmethod
-    def verify_password(user_base, password):
+    def all(paging_args):
+        return paging(User.objects(), 'id', paging_args)
+
+    @staticmethod
+    def verify_password(user, password):
         """Verify user password.
 
-        :param user_base:
+        :param user:
         :param password:
         :return: bool
         """
-        assert isinstance(user_base, User)
+        assert isinstance(user, User)
         assert isinstance(password, basestring)
 
-        return user_base.password == UserHelper.password_hash(password, user_base.salt)
+        return user.password == UserHelper.password_hash(password, user.salt)
 
     @staticmethod
     def update_password(user_id, password):
@@ -75,6 +81,39 @@ class UserHelper(object):
         password = UserHelper.password_hash(password, salt)
 
         User.objects(id=user_id).update(set__salt=salt, set__password=password)
+
+    @staticmethod
+    def update(user_id, **kwargs):
+        """Update user.
+
+        :param user_id:
+        :param kwargs:
+        :return: updated user document
+        """
+        update_kwargs = {
+            'new': True, 'upsert': False
+        }
+
+        if 'password' in kwargs:
+            assert isinstance(kwargs['password'], basestring)
+
+            salt = binascii.hexlify(os.urandom(32))
+            password = UserHelper.password_hash(kwargs['password'], salt)
+
+            update_kwargs['set__salt'] = salt
+            update_kwargs['set__password'] = password
+
+        if 'groups' in kwargs:
+            assert isinstance(kwargs['groups'], list)
+
+            update_kwargs['set__groups'] = kwargs['groups']
+
+        if 'name' in kwargs:
+            assert isinstance(kwargs['name'], basestring)
+
+            update_kwargs['set__name'] = kwargs['name']
+
+        return User.objects(id=user_id).modify(**update_kwargs)
 
     @staticmethod
     def insert(username, name, password, groups):

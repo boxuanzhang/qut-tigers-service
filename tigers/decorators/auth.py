@@ -27,25 +27,31 @@ def login_required(f):
         # Set up user information
         uid, _, _ = parse_payload(payload)
 
-        user_base = UserHelper.get(uid)
-        if not user_base:
+        user = UserHelper.get(uid)
+        if not user:
             return 'Nonexistent user or denied user', 401
 
         # Delete password information for security issue
-        user_base.password = ''
-        user_base.salt = ''
+        user.password = ''
+        user.salt = ''
 
         # Prevent some actions
-        user_base.delete = user_base.modify = user_base.reload = None
-        user_base.save = user_base.update = None
+        user.delete = user.modify = user.reload = None
+        user.save = user.update = None
 
         # For compatibility
-        user_base.uid = str(user_base.id)
+        user.uid = str(user.id)
 
         # Store raw token
-        user_base.token = token
+        user.token = token
 
-        g.user = user_base
+        # Get permissions
+        permissions = []
+        for group in user.groups:
+            permissions += group.permissions
+        user.permissions = set(permissions)
+
+        g.user = user
 
         return f(*args, **kwargs)
     return decorated_function
