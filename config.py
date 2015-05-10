@@ -5,6 +5,8 @@ DEBUG = True
 # SERVER_NAME = ''
 # APPLICATION_ROOT = ''
 
+SUPER_USER = 'root'
+
 # MongoDB
 MONGODB_HOST = '127.0.0.1'
 MONGODB_PORT = 27017
