@@ -18,9 +18,13 @@ class RefreshToken(Document):
     timestamp = DateTimeField(default=datetime.datetime.utcnow, required=True)
 
 
-class Group(Document):
+class Group(Document, ExportableMixin):
     name = StringField(required=True)
     permissions = ListField(StringField(), default=list)
+
+    _exported_fields = (
+        'id', 'name', 'permissions'
+    )
 
 
 class User(Document, ExportableMixin):
@@ -32,7 +36,7 @@ class User(Document, ExportableMixin):
     join_time = DateTimeField(required=True)
 
     _exported_fields = (
-        'username', 'name', 'join_time'
+        'id', 'username', 'name', 'join_time'
     )
 
 
