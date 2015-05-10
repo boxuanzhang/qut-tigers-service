@@ -26,7 +26,7 @@ class PermissionsManager(object):
                     return f(*args, **kwargs)
 
                 if permission_key not in g.user.permissions:
-                    return 'Permission denied', 401
+                    return 'Permission denied', 403
                 return f(*args, **kwargs)
             return decorated_function
         return decorator

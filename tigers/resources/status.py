@@ -25,7 +25,7 @@ class Status(Resource):
         if status is None:
             abort(http_status.HTTP_404_NOT_FOUND)
         if status.user != g.user:
-            abort(http_status.HTTP_401_UNAUTHORIZED)
+            abort(http_status.HTTP_403_FORBIDDEN)
         StatusHelper.delete(ObjectId(status_id))
         return '', http_status.HTTP_204_NO_CONTENT
 

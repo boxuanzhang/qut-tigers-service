@@ -26,7 +26,7 @@ class Photo(Resource):
         if photo is None:
             abort(http_status.HTTP_404_NOT_FOUND)
         if photo.user != g.user:
-            abort(http_status.HTTP_401_UNAUTHORIZED)
+            abort(http_status.HTTP_403_FORBIDDEN)
         PhotoHelper.delete(ObjectId(photo_id))
         return '', http_status.HTTP_204_NO_CONTENT
 
@@ -52,7 +52,7 @@ class PhotoToken(Resource):
         data = verify_callback(request.headers.get('Authorization', ''), request.script_root + request.path, body)
 
         if not data:
-            abort(http_status.HTTP_401_UNAUTHORIZED)
+            abort(http_status.HTTP_403_FORBIDDEN)
 
         key = data.get('key')
         uid = data.get('uid')
@@ -61,7 +61,7 @@ class PhotoToken(Resource):
         # Get user document
         user_base = UserHelper.get(uid)
         if not user_base:
-            abort(http_status.HTTP_401_UNAUTHORIZED)
+            abort(http_status.HTTP_403_FORBIDDEN)
 
         photo = PhotoHelper.insert(user_base, key, desc)
 
