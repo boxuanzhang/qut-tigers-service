@@ -16,7 +16,7 @@ class Photo(Resource):
         if photo is None:
             abort(http_status.HTTP_404_NOT_FOUND)
         return {
-            'status': photo.export_entity()
+            'photo': photo.export_entity()
         }
 
     @login_required
