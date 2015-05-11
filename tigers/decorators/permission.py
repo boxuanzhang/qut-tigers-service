@@ -11,6 +11,9 @@ class PermissionsManager(object):
 
     _entry_registry = defaultdict(set)
 
+    def is_superuser(self, user=g.user):
+        return user.username == app.config['SUPER_USER']
+
     def permission_required(self, category, entry):
         # Add entry to registry
         self._entry_registry[category].add(entry)
@@ -33,3 +36,10 @@ class PermissionsManager(object):
 
     def get_entry_registry(self):
         return deepcopy(self._entry_registry)
+
+    def get_registered_permissions(self):
+        permissions = []
+        for category, entries in self._entry_registry.items():
+            for entry in entries:
+                permissions.append('%s:%s' % (category, entry))
+        return permissions

@@ -1,6 +1,6 @@
 from flask.ext.restful import Resource, abort, reqparse
 
-from .. import app
+from .. import app, permission_manager
 from ..models.user import UserHelper
 from ..utils.auth import generate_token
 from ..utils import http_status
@@ -26,10 +26,13 @@ class Auth(Resource):
         access, refresh, expire = generate_token(user)
 
         # Get permissions
-        permissions = []
-        for group in user.groups:
-            permissions += group.permissions
-        user.permissions = set(permissions)
+        if permission_manager.is_superuser(user):
+            permissions = permission_manager.get_registered_permissions()
+        else:
+            permissions = []
+            for group in user.groups:
+                permissions += group.permissions
+            user.permissions = set(permissions)
 
         return \
             {
