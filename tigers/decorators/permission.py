@@ -11,7 +11,9 @@ class PermissionsManager(object):
 
     _entry_registry = defaultdict(set)
 
-    def is_superuser(self, user=g.user):
+    def is_superuser(self, user=None):
+        if not user:
+            user = g.user
         return user.username == app.config['SUPER_USER']
 
     def permission_required(self, category, entry):
