@@ -33,10 +33,11 @@ class User(Document, ExportableMixin):
     password = StringField(required=True)
     salt = StringField(required=True)
     groups = ListField(ReferenceField(Group))
+    description = StringField(required=False)
     join_time = DateTimeField(required=True)
 
     _exported_fields = (
-        'id', 'username', 'name', 'join_time'
+        'id', 'username', 'name', 'join_time', 'description'
     )
 
 
@@ -120,10 +121,18 @@ class UserHelper(object):
 
             update_kwargs['set__name'] = kwargs['name']
 
+        if 'description' in kwargs:
+            assert isinstance(kwargs['description'], basestring)
+
+            update_kwargs['set__description'] = kwargs['description']
+
         return User.objects(id=user_id).modify(**update_kwargs)
 
     @staticmethod
-    def insert(username, name, password, groups):
+    def insert(username, name, password, groups=None, description=''):
+        if not groups:
+            groups = []
+
         # Prepare password
         salt = binascii.hexlify(os.urandom(32))
         salted_password = UserHelper.password_hash(password, salt)
@@ -136,6 +145,7 @@ class UserHelper(object):
         user_base.password = salted_password
         user_base.salt = salt
         user_base.join_time = datetime.datetime.utcnow()
+        user_base.description = description
         user_base.save()
 
         return user_base

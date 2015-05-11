@@ -12,6 +12,7 @@ class User(Resource):
     put_parser.add_argument('name', type=unicode, required=False)
     put_parser.add_argument('password', type=unicode, required=False)
     put_parser.add_argument('groups', type=ObjectId, action='append', required=False)
+    put_parser.add_argument('description', type=unicode, required=False)
 
     def get(self, user_id):
         user = UserHelper.get(ObjectId(user_id))
