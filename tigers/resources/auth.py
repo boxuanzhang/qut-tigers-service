@@ -19,7 +19,7 @@ class Auth(Resource):
     def get(self):
         args = self.get_parser.parse_args()
         user = UserHelper.get_by_username(args['username'])
-        if not UserHelper.verify_password(user, args['password']):
+        if not user or not UserHelper.verify_password(user, args['password']):
             return '', 401
 
         # Generate access token
