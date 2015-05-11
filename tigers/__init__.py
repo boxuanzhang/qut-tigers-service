@@ -64,3 +64,8 @@ api.add_resource(PhotoToken, '/photo_token/')
 from .resources.user import User, UserList
 api.add_resource(UserList, '/user/')
 api.add_resource(User, '/user/<user_id>')
+
+# Group
+from .resources.group import Group, GroupList
+api.add_resource(GroupList, '/group/')
+api.add_resource(Group, '/group/<group_id>')

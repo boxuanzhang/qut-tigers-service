@@ -41,6 +41,60 @@ class User(Document, ExportableMixin):
     )
 
 
+class GroupHelper(object):
+
+    @staticmethod
+    def get(group_id):
+        assert isinstance(group_id, ObjectId)
+
+        return Group.objects(id=group_id).first()
+
+    @staticmethod
+    def insert(name, permissions=None):
+        assert isinstance(name, basestring)
+        assert permissions is None or isinstance(permissions, list)
+
+        if permissions is None:
+            permissions = []
+
+        group = Group()
+        group.name = name
+        group.permissions = permissions
+        group.save()
+
+        return group
+
+    @staticmethod
+    def update(group_id, **kwargs):
+        assert isinstance(group_id, ObjectId)
+
+        update_kwargs = {
+            'new': True, 'upsert': False
+        }
+
+        if 'name' in kwargs and kwargs['name'] is not None:
+            assert isinstance(kwargs['name'], basestring)
+
+            update_kwargs['set__name'] = kwargs['name']
+
+        if 'permissions' in kwargs and kwargs['permissions'] is not None:
+            assert isinstance(kwargs['permissions'], list)
+
+            update_kwargs['set__permissions'] = kwargs['permissions']
+
+        return Group.objects(id=group_id).modify(**update_kwargs)
+
+    @staticmethod
+    def all():
+        return Group.objects()
+
+    @staticmethod
+    def delete(group_id):
+        assert isinstance(group_id, ObjectId)
+
+        return Group.objects(id=group_id).delete()
+
+
 class UserHelper(object):
     """Helper for User document."""
 
