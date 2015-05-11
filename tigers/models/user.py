@@ -102,7 +102,7 @@ class UserHelper(object):
             'new': True, 'upsert': False
         }
 
-        if 'password' in kwargs:
+        if 'password' in kwargs and kwargs['password'] is not None:
             assert isinstance(kwargs['password'], basestring)
 
             salt = binascii.hexlify(os.urandom(32))
@@ -111,17 +111,17 @@ class UserHelper(object):
             update_kwargs['set__salt'] = salt
             update_kwargs['set__password'] = password
 
-        if 'groups' in kwargs:
+        if 'groups' in kwargs and kwargs['groups'] is not None:
             assert isinstance(kwargs['groups'], list)
 
             update_kwargs['set__groups'] = kwargs['groups']
 
-        if 'name' in kwargs:
+        if 'name' in kwargs and kwargs['name'] is not None:
             assert isinstance(kwargs['name'], basestring)
 
             update_kwargs['set__name'] = kwargs['name']
 
-        if 'description' in kwargs:
+        if 'description' in kwargs and kwargs['description'] is not None:
             assert isinstance(kwargs['description'], basestring)
 
             update_kwargs['set__description'] = kwargs['description']
