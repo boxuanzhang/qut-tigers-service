@@ -58,7 +58,7 @@ api.add_resource(Status, '/status/<status_id>')
 # Photo
 from .resources.photo import Photo, PhotoToken
 api.add_resource(Photo, '/photo/<photo_id>')
-api.add_resource(PhotoToken, '/photo_token')
+api.add_resource(PhotoToken, '/photo_token/')
 
 # User
 from .resources.user import User, UserList
