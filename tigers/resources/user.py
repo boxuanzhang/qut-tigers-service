@@ -70,7 +70,7 @@ class UserList(Resource):
     @permission_manager.permission_required('users', 'post')
     def post(self):
         args = self.post_parser.parse_args()
-        user = UserHelper.insert(args['username'], args['name'], args['password'], [])
+        user = UserHelper.insert(args['username'], args['name'], args['password'], args['groups'], args['description'])
 
         return {
             'user': user.export_entity()
