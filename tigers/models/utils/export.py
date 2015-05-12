@@ -25,7 +25,7 @@ def export_entity(obj, fields=None):
 
         # Handle system types
         if isinstance(val, list):
-            return map(export_entity, val)
+            return map(export_val, val)
         elif isinstance(val, datetime.datetime):
             return dt_to_timestamp(val)
 
