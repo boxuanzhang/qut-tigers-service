@@ -2,7 +2,7 @@ from bson import ObjectId
 from flask.ext.restful import Resource, abort, reqparse
 
 from .. import permission_manager
-from ..models.user import UserHelper
+from ..models.user import UserHelper, GroupHelper
 from ..decorators.auth import login_required
 
 
@@ -70,7 +70,10 @@ class UserList(Resource):
     @permission_manager.permission_required('users', 'post')
     def post(self):
         args = self.post_parser.parse_args()
-        user = UserHelper.insert(args['username'], args['name'], args['password'], args['groups'], args['description'])
+
+        groups = [GroupHelper.get(ObjectId(gid)) for gid in args['groups']]
+
+        user = UserHelper.insert(args['username'], args['name'], args['password'], groups, args['description'])
 
         return {
             'user': user.export_entity()
