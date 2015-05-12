@@ -37,7 +37,7 @@ class User(Document, ExportableMixin):
     join_time = DateTimeField(required=True)
 
     _exported_fields = (
-        'id', 'username', 'name', 'join_time', 'description'
+        'id', 'username', 'name', 'join_time', 'description', 'groups'
     )
 
 
