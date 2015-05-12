@@ -50,7 +50,9 @@ class UserList(Resource):
     post_parser = reqparse.RequestParser()
     post_parser.add_argument('username', type=unicode, required=True)
     post_parser.add_argument('password', type=unicode, required=True)
+    post_parser.add_argument('description', type=unicode, required=True)
     post_parser.add_argument('name', type=unicode, required=True)
+    post_parser.add_argument('groups', type=ObjectId, action='append')
 
     @login_required
     @permission_manager.permission_required('users', 'get')
