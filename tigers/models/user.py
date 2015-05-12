@@ -86,7 +86,7 @@ class GroupHelper(object):
 
     @staticmethod
     def all():
-        return Group.objects()
+        return Group.objects().all()
 
     @staticmethod
     def delete(group_id):
